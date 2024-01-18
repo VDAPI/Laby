@@ -1,0 +1,73 @@
+
+Imie: Dawid
+Nazwisko: Pilarski
+Plec: Mezczyzna
+Data urodzenia: 2022-09-20
+Numer PESEL: 1234123412341234
+Numer indeksu: 280468
+Stopien studiow 1
+Semestr: 1
+Kursy: [
+Nazwa: Algebra z geometria analityczna
+Prowadzacy: Jakub Minecki
+Oceny: [2.0]
+Czy zdaje: false
+]
+
+Imie: Jan
+Nazwisko: Kowalski
+Plec: Mezczyzna
+Data urodzenia: 2000-10-05
+Numer PESEL: 4215435412421242
+Numer indeksu: 123123
+Stopien studiow 2
+Semestr: 3
+Kursy: [
+Nazwa: Analiza matematyczna
+Prowadzacy: Krzysztof Michalik
+Oceny: [5.0]
+Czy zdaje: true
+, 
+Nazwa: Algebra z geometria analityczna
+Prowadzacy: Jakub Minecki
+Oceny: [3.0]
+Czy zdaje: true
+]
+
+Imie: Jacek
+Nazwisko: Rasztar
+Plec: Mezczyzna
+Data urodzenia: 1980-10-20
+Numer PESEL: 123123123123123
+Stanowisko: Specjalista
+Staz: 10lat
+Zarobki: 10000.0
+
+Imie: Dominik
+Nazwisko: Pinczak
+Plec: Mezczyzna
+Data urodzenia: 1992-04-12
+Numer PESEL: 1438924032804413
+Stanowisko: Referent
+Staz: 5lat
+Zarobki: 8000.0
+
+Imie: Julia
+Nazwisko: Skoczylas
+Plec: Kobieta
+Data urodzenia: 2000-08-12
+Numer PESEL: 9089039830934098
+Stanowisko: Wykladowca
+Staz: 2lat
+Zarobki: 8000.0
+Liczba publikacji: 1
+
+Imie: Emilia
+Nazwisko: Malolepsza
+Plec: Kobieta
+Data urodzenia: 1976-01-02
+Numer PESEL: 1323423423422311
+Stanowisko: Profesor Nadzwyczajny
+Staz: 28lat
+Zarobki: 15000.0
+Liczba publikacji: 15
