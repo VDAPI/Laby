@@ -1,12 +1,16 @@
 package Main;
 
+import StrategiaStudent.StypendiumStrategia;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Student extends Osoba{
+    private double Stypendium;
     private String indeks;
     private byte nrSemestru;
     private byte stopienStudiow;
+    private StypendiumStrategia stypendiumStrategia;
     private ArrayList<Kursy> kursy = new ArrayList<Kursy>();
     private static final long serialVersionUID = 1275997691580326078L;
 
@@ -15,6 +19,21 @@ public class Student extends Osoba{
         this.indeks = indeks;
         this.stopienStudiow = stopienStudiow;
         this.nrSemestru = nrSemestru;
+    }
+
+    public double getStypendium() {
+        return Stypendium;
+    }
+
+    public void setStypendium(double stypendium) {
+        Stypendium = stypendium;
+    }
+
+    public byte getStopienStudiow() {
+        return stopienStudiow;
+    }
+    public void ustawMetodeStypendium(StypendiumStrategia stypendiumStrategia){
+        this.stypendiumStrategia = stypendiumStrategia;
     }
 
     public String getIndeks() {

@@ -15,6 +15,8 @@ import static Main.Wyszukaj.*;
 import static Wyjatki.Wyjatki.sprawdzCzyPusty;
 import static Wyjatki.Wyjatki.sprawdzNumer;
 
+//TODO TEN KOD NIEAKTUALNY TYLKO METODY NA DOLE PRZENIESC GDZIE INDZIEJ I NAPRAWIC WYJATKI
+
 public class Main {
     public static void main(String[] args) {
 
@@ -375,7 +377,45 @@ public class Main {
     }
 
     public static void dodajPracownikaUczelni(ArrayList<Osoba> osoby, String imie, String nazwisko, String pesel, String plec,
-                                              String kwota, String staz, String stanowisko, String data, String publikacje, String dorobek) {
+                                              String kwota, String staz, String stanowisko, String data, String dorobek) {
+        LocalDate dataUrodzenia=null;
+        Double zarobki;
+        int liczbaPublikacji, wartoscDorobku;
+        try {
+            sprawdzCzyPusty(imie);
+            sprawdzCzyPusty(nazwisko);
+            sprawdzCzyPusty(plec);
+            try {
+                dataUrodzenia = LocalDate.parse(data);
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(null, "Wprowadzono nieprawidlowy format daty", "Blad", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+        } catch (Wyjatek e) {
+            JOptionPane.showMessageDialog(null, "Puste pole lub bledny pesel!", "Blad", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            sprawdzNumer(pesel, 11);
+            try {
+                wartoscDorobku = Integer.parseInt(sprawdzCzyPusty(dorobek));
+                zarobki = Double.parseDouble(sprawdzCzyPusty(kwota));
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Wprowadzono bledny indeks lub pesel", "Blad", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (Wyjatek e) {
+            JOptionPane.showMessageDialog(null, "Wprowadzono zly format stopien studiow lub nr semestru!", "Blad", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(null, "Dodano pracownika!", "Dodano",JOptionPane.INFORMATION_MESSAGE);
+        osoby.add(new PracownikUczelni(pesel, imie, nazwisko, dataUrodzenia, plec, zarobki, staz, stanowisko, wartoscDorobku));
+    }
+    public static void dodajPracownikaNaukowegoo(ArrayList<Osoba> osoby, String imie, String nazwisko, String pesel, String plec,
+                                              String kwota, String staz, String stanowisko, String data, String publikacje) {
         LocalDate dataUrodzenia=null;
         Double zarobki;
         int liczbaPublikacji, wartoscDorobku;
@@ -399,7 +439,6 @@ public class Main {
             sprawdzNumer(pesel, 11);
             try {
                 liczbaPublikacji = Integer.parseInt(sprawdzCzyPusty(publikacje));
-                wartoscDorobku = Integer.parseInt(sprawdzCzyPusty(dorobek));
                 zarobki = Double.parseDouble(sprawdzCzyPusty(kwota));
 
             } catch (NumberFormatException e) {
@@ -411,6 +450,6 @@ public class Main {
             return;
         }
         JOptionPane.showMessageDialog(null, "Dodano pracownika!", "Dodano",JOptionPane.INFORMATION_MESSAGE);
-        osoby.add(new PracownikUczelni(pesel, imie, nazwisko, dataUrodzenia, plec, zarobki, staz, stanowisko, wartoscDorobku));
+        osoby.add(new PracownikUczelniNaukowoDydaktyczny(pesel, imie, nazwisko, dataUrodzenia, plec, zarobki, staz, stanowisko, liczbaPublikacji));
     }
 }

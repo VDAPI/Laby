@@ -7,8 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Main.Main.dodajPracownikaUczelni;
-import static Main.Main.dodajStudenta;
+import static Main.Main.*;
 import static Main.Wyszukaj.*;
 
 
@@ -21,6 +20,22 @@ public class MenuGlowneListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+       /* if (e.getSource() == menu.getButtonAktywnosc()){
+            menu.getPanelGlowny().removeAll();
+            menu.rysujStrategie(menu.getPanelGlowny());
+        }
+        if (e.getSource() == menu.getButtonSredniaOcen()){
+            menu.getPanelGlowny().removeAll();
+            menu.rysujStrategie(menu.getPanelGlowny());
+        }
+        if (e.getSource() == menu.getButtonIloscPublikacji()){
+            menu.getPanelGlowny().removeAll();
+            menu.rysujStrategie(menu.getPanelGlowny());
+        }
+        if (e.getSource() == menu.getButtonStaz()){
+            menu.getPanelGlowny().removeAll();
+            menu.rysujStrategie(menu.getPanelGlowny());
+        }*/
         if (e.getSource() == menu.getButtonStudent()) {
             menu.getPanelGlowny().removeAll();
             menu.rysujPanelStudent(menu.getPanelGlowny());
@@ -54,35 +69,18 @@ public class MenuGlowneListener implements ActionListener {
             menu.getPanelGlowny().repaint();
         }
         if (e.getSource() == menu.getButtonDodajPracownika2()) {
-            dodajPracownikaUczelni(menu.getOsoba(), menu.getTextImie().getText(), menu.getTextNazwisko().getText(), menu.getTextPesel().getText(), menu.getTextPlec().getText(), menu.getTextZarobki().getText(), menu.getTextStaz().getText(), menu.getTextStanowisko().getText(), menu.getTextDataUrodzenia().getText(), menu.getTextPublikacje().getText(), menu.getTextDorobek().getText());
+            dodajPracownikaUczelni(menu.getOsoba(), menu.getTextImie().getText(), menu.getTextNazwisko().getText(), menu.getTextPesel().getText(), menu.getTextPlec().getText(), menu.getTextZarobki().getText(), menu.getTextStaz().getText(), menu.getTextStanowisko().getText(), menu.getTextDataUrodzenia().getText(), menu.getTextDorobek().getText());
             menu.getPanelGlowny().remove(menu.getPanelStudentci());
             menu.getPanelGlowny().remove(menu.getScrollPaneKoszyk());
             menu.getPanelGlowny().revalidate();
             menu.getPanelGlowny().repaint();
             menu.rysujPanelStudentow(menu.getPanelGlowny(), PracownikUczelni.class, menu.getOsoba());
         }
-        if (e.getSource() instanceof JButton && menu.getButtonStudentMap() != null || menu.getButtonPracownikMap() != null) {
-            JButton sourceButton = (JButton) e.getSource();
-            Student produktToRemove = menu.getButtonStudentMap().get(sourceButton);
-            Pracownik pracownikToRemove = menu.getButtonPracownikMap().get(sourceButton);
-
-            if (produktToRemove != null || pracownikToRemove != null) {
-                if (produktToRemove instanceof Student) {
-                    menu.getOsoba().remove(produktToRemove);
-                }
-                if (pracownikToRemove instanceof PracownikUczelni) {
-                    menu.getOsoba().remove(pracownikToRemove);
-                }
-                menu.getPanelStudentci().remove(sourceButton.getParent());
-                menu.getPanelStudentci().revalidate();
-                menu.getPanelStudentci().repaint();
-                menu.getPanelStudentci().setPreferredSize(new Dimension(700, menu.getPanelStudentci().getComponentCount() * 200));
-            }
-        }
         if (e.getSource() == menu.getButtonWyszukaj()) {
             menu.getPanelGlowny().removeAll();
             menu.getPanelGlowny().revalidate();
             menu.getPanelGlowny().repaint();
+            menu.rysujPanelStudentow(menu.getPanelGlowny(),Osoba.class,menu.getOsoba());
             menu.rysujPanelWyszukiwanie(menu.getPanelGlowny());
         }
         if (e.getSource() == menu.getWyszukajStudentaPoNazwisku()) {
@@ -145,19 +143,69 @@ public class MenuGlowneListener implements ActionListener {
             menu.getPanelGlowny().revalidate();
             menu.getPanelGlowny().repaint();
         }
-        if (e.getSource() instanceof JButton && menu.getKursStudentMap() != null) {
-            JButton sourceButton = (JButton) e.getSource();
-            Student data = menu.getKursStudentMap().get(sourceButton);
+        if(e.getSource()instanceof JButton) {
+            if (e.getSource() instanceof JButton && menu.getKursStudentMap() != null) {
+                JButton sourceButton = (JButton) e.getSource();
+                Student data = menu.getKursStudentMap().get(sourceButton);
 
-            if (data != null) {
+                if (data != null) {
 
-                menu.getOsoba().get(menu.getOsoba().indexOf(data)).dodajKurs(menu.getTextNazwaKursu().getText(),menu.getTextWykladowca().getText());
-                menu.getPanelGlowny().remove(menu.getPanelStudentci());
-                menu.getPanelGlowny().remove(menu.getScrollPaneKoszyk());
-                menu.rysujPanelStudentow(menu.getPanelGlowny(),Student.class,menu.getOsoba());
-                menu.getPanelStudentci().revalidate();
-                menu.getPanelStudentci().repaint();
+                    menu.getOsoba().get(menu.getOsoba().indexOf(data)).dodajKurs(menu.getTextNazwaKursu().getText(), menu.getTextWykladowca().getText());
+                    menu.getPanelGlowny().remove(menu.getPanelStudentci());
+                    menu.getPanelGlowny().remove(menu.getScrollPaneKoszyk());
+                    menu.rysujPanelStudentow(menu.getPanelGlowny(), Student.class, menu.getOsoba());
+                    menu.getPanelStudentci().revalidate();
+                    menu.getPanelStudentci().repaint();
+                }
             }
+            if (e.getSource() instanceof JButton && menu.getButtonStudentMap() != null || menu.getButtonPracownikMap() != null) {
+                JButton sourceButton = (JButton) e.getSource();
+                Student produktToRemove = menu.getButtonStudentMap().get(sourceButton);
+                PracownikUczelni pracownikToRemove = menu.getButtonPracownikMap().get(sourceButton);
+                PracownikUczelniNaukowoDydaktyczny naukowyToRemove = menu.getButtonNaukowyMap().get(sourceButton);
+
+                if (produktToRemove != null || pracownikToRemove != null || naukowyToRemove != null) {
+                    if (produktToRemove instanceof Student) {
+                        menu.getOsoba().remove(produktToRemove);
+                    }
+                    if (pracownikToRemove instanceof PracownikUczelni) {
+                        menu.getOsoba().remove(pracownikToRemove);
+                    }
+                    if (naukowyToRemove instanceof PracownikUczelniNaukowoDydaktyczny) {
+                        menu.getOsoba().remove(naukowyToRemove);
+                    }
+                    menu.getPanelStudentci().remove(sourceButton.getParent());
+                    menu.getPanelStudentci().revalidate();
+                    menu.getPanelStudentci().repaint();
+                    menu.getPanelStudentci().setPreferredSize(new Dimension(700, menu.getPanelStudentci().getComponentCount() * 200));
+                }
+            }
+        }
+        if (e.getSource()==menu.getButtonDodajPracownikaNaukowego()){
+            menu.rysujPanelStudentow(menu.getPanelGlowny(), PracownikUczelniNaukowoDydaktyczny.class, menu.getOsoba());
+            menu.rysujDodajPracownikaNaukowego(menu.getPanelGlowny());
+            menu.getPanelGlowny().revalidate();
+            menu.getPanelGlowny().repaint();
+        }
+        if (e.getSource()==menu.getButtonDodajPracownikaNaukowego2()){
+            dodajPracownikaNaukowegoo(menu.getOsoba(), menu.getTextImie().getText(), menu.getTextNazwisko().getText(), menu.getTextPesel().getText(), menu.getTextPlec().getText(), menu.getTextZarobki().getText(), menu.getTextStaz().getText(), menu.getTextStanowisko().getText(), menu.getTextDataUrodzenia().getText(), menu.getTextPublikacje().getText());
+            menu.getPanelGlowny().remove(menu.getPanelStudentci());
+            menu.getPanelGlowny().remove(menu.getScrollPaneKoszyk());
+            menu.getPanelGlowny().revalidate();
+            menu.getPanelGlowny().repaint();
+            menu.rysujPanelStudentow(menu.getPanelGlowny(), PracownikUczelniNaukowoDydaktyczny.class, menu.getOsoba());
+        }
+        if(e.getSource()==menu.getButtonPracownikNaukowy()){
+            menu.getPanelGlowny().removeAll();
+            menu.rysujPanelPracownikNaukowy(menu.getPanelGlowny());
+            menu.getPanelGlowny().revalidate();
+            menu.getPanelGlowny().repaint();
+        }
+        if (e.getSource()==menu.getButtonStrategia()){
+            menu.getPanelGlowny().removeAll();
+            menu.rysujStrategie(menu.getPanelGlowny());
+            menu.getPanelGlowny().revalidate();
+            menu.getPanelGlowny().repaint();
         }
     }
 }
