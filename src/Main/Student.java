@@ -42,7 +42,7 @@ public class Student extends Osoba{
     }
 
     public void dodajKurs(String nazwa, String prowadzacy){
-        kursy.add(new Kursy(nazwa, prowadzacy));
+        this.kursy.add(new Kursy(nazwa, prowadzacy));
     }
     public void dodajOcene(double ocena, String nazwaKursu){
         for (int i = 0; i < kursy.size(); i++) {

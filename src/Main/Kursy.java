@@ -61,6 +61,6 @@ public class Kursy implements Serializable {
     @Override
     public String toString() {
         super.toString();
-        return "\nNazwa: "+nazwa+"\nProwadzacy: "+prowadzacy+"\nOceny: "+oceny+"\nCzy zdaje: "+getCzyZdaje()+"\n";
+        return "\nNazwa: "+nazwa+"\nProwadzacy: "+prowadzacy;
     }
 }

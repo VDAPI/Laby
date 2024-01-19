@@ -1,24 +1,39 @@
 package Grafika.MenuGlowne;
 
-import Main.Osoba;
-import Main.Serializacja;
-import Main.Student;
+import Main.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MenuGlowne extends JPanel {
-    JScrollPane scrollPaneKoszyk;
+    private JTextField textNazwaKursu;
+    private JTextField textWykladowca;
+    private JButton buttonDodajKurs;
+    private JButton wyszukajPoIndeksie;
+    private JButton wyszukajPoNazwisku;
+    private JButton wyszukajStudentaPoNazwisku;
+    private JButton WyszukajPoStanowiskuPracownikaUczelni;
+    private JButton wyszukajPracownikaPoNazwisku;
+    private JButton wyszukajPracownikaNaukowegoPoNazwisku;
+    private JButton wyszukajPowyzejWartosciDorobkuT;
+    private JButton wyszukajPoStanowisku;
     private JButton dodajPracownika;
     private JButton buttonDodajPracownika2;
     private JButton buttonWyszukaj;
-
+    private JTextField textWyszukaj;
+    Map<JButton, Pracownik> buttonPracownikMap;
+    Map<JButton, Student> buttonStudentMap;
+    Map<JButton, Student> kursStudentMap;
     private MenuGlowneListener menuGlowneListener = new MenuGlowneListener(this);
+    ;
     private JFrame frame;
     private JPanel panelGlowny;
     private JPanel panelGorny;
@@ -26,35 +41,20 @@ public class MenuGlowne extends JPanel {
     private JButton buttonStudent;
     private JButton buttonPracownik;
     private JButton buttonPracownikNaukowy;
-    private JButton buttonDodajStudenta;
-    private JButton buttonDodajStudenta2;
-    private JTextField textImie;
-    private JTextField textNazwisko;
-    private JTextField textDataUrodzenia;
-    private JTextField textPesel;
-    private JTextField textPlec;
-    private JTextField textIndeks;
-    private JTextField textStopienStudiow;
-    private JTextField textNumerSemestru;
     JTextField textZarobki;
     JTextField textStanowisko;
     JTextField textPublikacje;
     JTextField textDorobek;
-    ArrayList<Osoba> osoby;
+    ArrayList<Osoba> osoba;
     JButton buttonWyjdz;
     JTextField textStaz;
-    public MenuGlowne() {
-        super();
-    }
-
 
     public ActionListener getMenuGlowneListener() {
         return menuGlowneListener;
     }
 
-
     public void openMenuGlowne(JFrame frame, ArrayList<Osoba> osoby) {
-        this.osoby = osoby;
+        this.osoba = osoby;
         this.frame = frame;
 
         //IMAGE
@@ -101,7 +101,7 @@ public class MenuGlowne extends JPanel {
         panelGorny.add(logoLabel);
 
         //PANEL GORNY2
-        panelGorny2.setSize(0,30);
+        panelGorny2.setSize(0, 30);
         panelGorny2.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panelGorny2.setBackground(new Color(176, 33, 33));
         panelGorny2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -152,16 +152,26 @@ public class MenuGlowne extends JPanel {
         panelGlowny.setLayout(null);
         panelGlowny.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panelGlowny.setBackground(new Color(255, 255, 255));
-
-
     }
 
-    public void rysujPanelStudent(JPanel panelGlowny) {
+    private JButton buttonDodajStudenta;
+    private JTextField textImie;
+    private JTextField textNazwisko;
+    private JTextField textDataUrodzenia;
+    private JTextField textPesel;
+    private JTextField textPlec;
+    private JTextField textIndeks;
+    private JTextField textStopienStudiow;
+    private JTextField textNumerSemestru;
+    private JButton buttonDodajStudenta2;
+    private JPanel panelStudentci;
+    private JScrollPane scrollPaneKoszyk;
 
+    public void rysujPanelStudent(JPanel panelGlowny) {
         //PANEL STUDENT
         JPanel panelStudent = new JPanel();
         panelStudent.setBounds(0, 0, 190, 1620);
-        panelStudent.setBackground(new Color(176, 33, 33));
+        panelStudent.setBackground(new Color(190, 33, 33));
         panelStudent.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panelStudent.setLayout(null);
         panelGlowny.add(panelStudent);
@@ -186,35 +196,21 @@ public class MenuGlowne extends JPanel {
         panelStudent.add(buttonDodajStudenta);
 
         //BUTTON DODAJ KURS
-        JButton buttonWyszukaj = new JButton();
-        buttonWyszukaj.setText("Wyszukaj");
-        buttonWyszukaj.setForeground(new Color(244, 214, 133));
-        buttonWyszukaj.setFont(new Font(null, Font.BOLD, 20));
-        buttonWyszukaj.setBackground(new Color(176, 33, 33));
-        buttonWyszukaj.addActionListener(menuGlowneListener);
-        buttonWyszukaj.setFocusable(false);
-        buttonWyszukaj.setBorder(BorderFactory.createEtchedBorder());
-        buttonWyszukaj.setBounds(0, 100, 190, 50);
-        panelStudent.add(buttonWyszukaj);
-
-        //BUTTON USUN STUDENTA
-        buttonWyjdz = new JButton();
-        buttonWyjdz.setText("WYJDZ");
-        buttonWyjdz.setForeground(new Color(244, 214, 133));
-        buttonWyjdz.setFont(new Font(null, Font.BOLD, 20));
-        buttonWyjdz.setBackground(new Color(176, 33, 33));
-        buttonWyjdz.addActionListener(menuGlowneListener);
-        buttonWyjdz.setFocusable(false);
-        buttonWyjdz.setBorder(BorderFactory.createEtchedBorder());
-        buttonWyjdz.setBounds(0, 150, 190, 50);
-        panelStudent.add(buttonWyjdz);
-
+        buttonDodajKurs = new JButton();
+        buttonDodajKurs.setText("Wyszukaj");
+        buttonDodajKurs.setForeground(new Color(244, 214, 133));
+        buttonDodajKurs.setFont(new Font(null, Font.BOLD, 20));
+        buttonDodajKurs.setBackground(new Color(176, 33, 33));
+        buttonDodajKurs.addActionListener(menuGlowneListener);
+        buttonDodajKurs.setFocusable(false);
+        buttonDodajKurs.setBorder(BorderFactory.createEtchedBorder());
+        buttonDodajKurs.setBounds(0, 100, 190, 50);
+        panelStudent.add(buttonDodajKurs);
     }
-
-    public void rysujDodajStudenta(JPanel panelGlowny){
+    public void rysujDodajStudenta(JPanel panelGlowny) {
         JPanel panelDodajStudenta = new JPanel();
         panelDodajStudenta.setLayout(null);
-        panelDodajStudenta.setBounds(190,0,300,1000);
+        panelDodajStudenta.setBounds(190, 0, 400, 1000);
         panelGlowny.add(panelDodajStudenta);
 
         JLabel labelImie;
@@ -225,6 +221,8 @@ public class MenuGlowne extends JPanel {
         JLabel labelIndeks;
         JLabel labelStopienStudiow;
         JLabel labelNumerSemestru;
+        JLabel labelNazwaKursu;
+        JLabel labelWykladowca;
 
         //TEXT FIELDY/LABELE
         textImie = new JTextField();
@@ -283,151 +281,39 @@ public class MenuGlowne extends JPanel {
         labelNumerSemestru.setBounds(60, 510, 110, 10);
         panelDodajStudenta.add(labelNumerSemestru);
 
+        textNazwaKursu = new JTextField();
+        textNazwaKursu.setBounds(60, 675, 250, 40);
+        panelDodajStudenta.add(textNazwaKursu);
+        labelNazwaKursu = new JLabel("KURS");
+        labelNazwaKursu.setBounds(60, 660, 250, 10);
+        panelDodajStudenta.add(labelNazwaKursu);
+
+        textWykladowca = new JTextField();
+        textWykladowca.setBounds(60, 750, 250, 40);
+        panelDodajStudenta.add(textWykladowca);
+        labelWykladowca = new JLabel("WYKLADOWCA");
+        labelWykladowca.setBounds(60, 735, 250, 10);
+        panelDodajStudenta.add(labelWykladowca);
+
         //BUTTON DODAJ
         buttonDodajStudenta2 = new JButton();
         buttonDodajStudenta2.setText("Dodaj");
-        buttonDodajStudenta2.setBounds(220,600,90,40);
+        buttonDodajStudenta2.setBounds(220, 600, 90, 40);
         buttonDodajStudenta2.setFocusable(false);
         buttonDodajStudenta2.addActionListener(menuGlowneListener);
         panelDodajStudenta.add(buttonDodajStudenta2);
     }
-    public void rysujPanelPracownik(JPanel panelGlowny) {
 
-        //PANEL PRACOWNIK
-        JPanel panelPracownik = new JPanel();
-        panelPracownik.setBounds(0, 0, 190, 1620);
-        panelPracownik.setBackground(new Color(176, 33, 33));
-        panelPracownik.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panelPracownik.setLayout(null);
-        panelGlowny.add(panelPracownik);
-
-        //LABEL STUDENT
-        JLabel labelStudent = new JLabel("PRACOWNIK");
-        labelStudent.setForeground(new Color(244, 214, 133));
-        labelStudent.setFont(new Font(null, Font.BOLD, 25));
-        labelStudent.setBounds(30, 0, 185, 50);
-        panelPracownik.add(labelStudent);
-
-        //BUTTON DODAJSTUDENTA
-        dodajPracownika = new JButton();
-        dodajPracownika.setText("Dodaj pracownika");
-        dodajPracownika.setForeground(new Color(244, 214, 133));
-        dodajPracownika.setFont(new Font(null, Font.BOLD, 20));
-        dodajPracownika.setBackground(new Color(176, 33, 33));
-        dodajPracownika.addActionListener(menuGlowneListener);
-        dodajPracownika.setFocusable(false);
-        dodajPracownika.setBorder(BorderFactory.createEtchedBorder());
-        dodajPracownika.setBounds(0, 50, 190, 50);
-        panelPracownik.add(dodajPracownika);
-
-        //BUTTON WYJDZ
-        panelPracownik.add(buttonWyjdz);
-
-    }
-
-    public void rysujDodajPracownika(JPanel panelGlowny){
-        JPanel panelDodajPracownika = new JPanel();
-        panelDodajPracownika.setLayout(null);
-        panelDodajPracownika.setBounds(190,0,1000,1000);
-        panelGlowny.add(panelDodajPracownika);
-
-        JLabel labelImie;
-        JLabel labelNazwisko;
-        JLabel labelDataUrodzenia;
-        JLabel labelPesel;
-        JLabel labelPlec;
-
-        //TEXT FIELDY/LABELE
-        textImie = new JTextField();
-        textImie.setBounds(60, 25, 250, 40);
-        panelDodajPracownika.add(textImie);
-        labelImie = new JLabel("IMIE");
-        labelImie.setBounds(60, 10, 250, 10);
-        panelDodajPracownika.add(labelImie);
-
-        textNazwisko = new JTextField();
-        textNazwisko.setBounds(60, 100, 250, 40);
-        panelDodajPracownika.add(textNazwisko);
-        labelNazwisko = new JLabel("NAZWISKO");
-        labelNazwisko.setBounds(60, 85, 250, 10);
-        panelDodajPracownika.add(labelNazwisko);
-
-        textDataUrodzenia = new JTextField();
-        textDataUrodzenia.setBounds(60, 175, 250, 40);
-        panelDodajPracownika.add(textDataUrodzenia);
-        labelDataUrodzenia = new JLabel("DATA URODZENIA (dd-mm-rrrr)");
-        labelDataUrodzenia.setBounds(60, 160, 250, 10);
-        panelDodajPracownika.add(labelDataUrodzenia);
-
-        textPesel = new JTextField();
-        textPesel.setBounds(60, 250, 250, 40);
-        panelDodajPracownika.add(textPesel);
-        labelPesel = new JLabel("PESEL");
-        labelPesel.setBounds(60, 235, 250, 10);
-        panelDodajPracownika.add(labelPesel);
-
-        textPlec = new JTextField();
-        textPlec.setBounds(60, 325, 250, 40);
-        panelDodajPracownika.add(textPlec);
-        labelPlec = new JLabel("PLEC");
-        labelPlec.setBounds(60, 310, 250, 10);
-        panelDodajPracownika.add(labelPlec);
-
-        textZarobki = new JTextField();
-        textZarobki.setBounds(60, 400, 250, 40);
-        panelDodajPracownika.add(textZarobki);
-        JLabel labelZarobki = new JLabel("ZAROBKI");
-        labelZarobki.setBounds(60, 385, 250, 10);
-        panelDodajPracownika.add(labelZarobki);
-
-        textStanowisko = new JTextField();
-        textStanowisko.setBounds(200, 475, 110, 40);
-        panelDodajPracownika.add(textStanowisko);
-        JLabel labelStanowisko = new JLabel("STANOWISKO");
-        labelStanowisko.setBounds(200, 460, 200, 10);
-        panelDodajPracownika.add(labelStanowisko);
-
-        textPublikacje = new JTextField();
-        textPublikacje.setBounds(60, 475, 110, 40);
-        panelDodajPracownika.add(textPublikacje);
-        JLabel labelPublikacje = new JLabel("IL PUBLIKACJE");
-        labelPublikacje.setBounds(60, 460, 110, 10);
-        panelDodajPracownika.add(labelPublikacje);
-
-        textDorobek = new JTextField();
-        textDorobek.setBounds(60, 550, 110, 40);
-        panelDodajPracownika.add(textDorobek);
-        JLabel labelDorobek = new JLabel("DOROBEK");
-        labelDorobek.setBounds(60, 535, 110, 10);
-        panelDodajPracownika.add(labelDorobek);
-
-        textStaz = new JTextField();
-        textStaz.setBounds(200, 550, 110, 40);
-        panelDodajPracownika.add(textStaz);
-        JLabel labelStaz = new JLabel("STAZ");
-        labelStaz.setBounds(200, 535, 110, 10);
-        panelDodajPracownika.add(labelStaz);
-
-
-        //BUTTON DODAJ
-        buttonDodajPracownika2 = new JButton();
-        buttonDodajPracownika2.setText("Dodaj");
-        buttonDodajPracownika2.setBounds(220,600,90,40);
-        buttonDodajPracownika2.setFocusable(false);
-        buttonDodajPracownika2.addActionListener(menuGlowneListener);
-        panelDodajPracownika.add(buttonDodajPracownika2);
-    }
-
-    public void rysujPanelStudent(JPanel panelGlowny, ArrayList<Osoba> osobas) {
-        JPanel panelStudentci = new JPanel();
+    public void rysujPanelStudentow(JPanel panelGlowny, Class<? extends Osoba> klasa, ArrayList<Osoba> osoby) {
+        panelStudentci = new JPanel();
         panelStudentci.setBackground(new Color(240, 252, 255));
         panelStudentci.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
         panelGlowny.add(panelStudentci);
-        panelStudentci.setPreferredSize(new Dimension(700, 700));
         panelStudentci.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        // LABELs
-        JLabel labelPustyKoszyk = new JLabel();
+        buttonStudentMap = new HashMap();
+        buttonPracownikMap = new HashMap<JButton, Pracownik>();
+        kursStudentMap = new HashMap<JButton, Student>();
 
         scrollPaneKoszyk = new JScrollPane(panelStudentci);
         JScrollBar szybkoscScrollPaneKoszyk = scrollPaneKoszyk.getVerticalScrollBar();
@@ -438,85 +324,82 @@ public class MenuGlowne extends JPanel {
         scrollPaneKoszyk.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
         scrollPaneKoszyk.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPaneKoszyk.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPaneKoszyk.setBounds(600, 0, 700, 1000);
+        scrollPaneKoszyk.setBounds(590, 0, 1330, 850);
 
-        //PANEL PRODUKT
-        if (osoby.isEmpty() && osoby == null) {
-            labelPustyKoszyk.setText("BRAK STUDENTOW");
-            labelPustyKoszyk.setHorizontalAlignment(JLabel.CENTER);
-            labelPustyKoszyk.setVerticalAlignment(JLabel.CENTER);
-            labelPustyKoszyk.setPreferredSize(new Dimension(500, 600));
-            labelPustyKoszyk.setForeground(Color.lightGray);
-            labelPustyKoszyk.setFont(new Font(null, Font.BOLD, 25));
-            panelStudentci.add(labelPustyKoszyk);
-        } else {
-            for (int i = 0; i < osobas.size(); i++) {
-                if (osobas.get(i) instanceof Student) {
-                    JButton buttonUsun = new JButton("x");
-                    Student student = (Student) osobas.get(i);
-                    JLabel labelImie = new JLabel("Imie: " + student.getImie());
-                    JLabel lanelNazwisko = new JLabel("Nazwisko: " + student.getNazwisko());
-                    JLabel labelPesel = new JLabel("PESEL: " + student.getPesel());
-                    JPanel panelStudent = new JPanel();
-                    int wysokoscPanelProdukt = (scrollPaneKoszyk.getHeight() / 4);
+        for (int i = 0; i < osoby.size(); i++) {
+            if (klasa.isAssignableFrom(osoby.get(i).getClass())) {
+                JButton buttonUsun = new JButton("Usun");
+                JLabel labelImie = new JLabel("Imie: " + osoby.get(i).getImie());
+                JLabel lanelNazwisko = new JLabel("Nazwisko: " + osoby.get(i).getNazwisko());
+                JLabel labelPesel = new JLabel("PESEL: " + osoby.get(i).getPesel());
+                JPanel panelStudent = new JPanel();
 
-                    panelStudent.setLayout(null);
-                    panelStudent.setBackground(new Color(251, 244, 244));
-                    panelStudent.setPreferredSize(new Dimension(scrollPaneKoszyk.getWidth() - 25, wysokoscPanelProdukt));
+                panelStudent.setLayout(null);
+                panelStudent.setBackground(new Color(251, 244, 244));
+                panelStudent.setPreferredSize(new Dimension(700, 200));
+                panelStudent.setBorder(BorderFactory.createEtchedBorder());
+                panelStudent.setSize(700, 700);
 
-                    labelImie.setBounds(wysokoscPanelProdukt + 10, 5, scrollPaneKoszyk.getWidth() - 50, 18);
-                    labelImie.setFont(new Font(null, Font.BOLD, 16));
+                labelImie.setBounds(10, 10, 300, 18);
+                labelImie.setFont(new Font(null, Font.BOLD, 16));
 
-                    lanelNazwisko.setFont(new Font(null, Font.BOLD, 16));
-                    lanelNazwisko.setFont(new Font(null, Font.BOLD, 16));
+                lanelNazwisko.setBounds(10, 30, 300, 18);
+                lanelNazwisko.setFont(new Font(null, Font.BOLD, 16));
 
-                    int buttonX = scrollPaneKoszyk.getWidth() - 50;
-                    buttonUsun.setBounds(buttonX, 0, 20, 20);
-                    buttonUsun.addActionListener(menuGlowneListener);
-                    buttonUsun.setFocusable(false);
-                    buttonUsun.setFont(new Font(null, Font.PLAIN, 20));
-                    buttonUsun.setBorder(null);
-                    buttonUsun.setBackground(null);
-                    buttonUsun.setForeground(Color.gray);
+                labelPesel.setBounds(10, 50, 300, 18);
+                labelPesel.setFont(new Font(null, Font.BOLD, 16));
 
-                    panelStudent.add(labelImie);
-                    panelStudent.add(lanelNazwisko);
-                    panelStudent.add(labelPesel);
-                    panelStudentci.add(panelStudent);
+                buttonUsun.setBounds(575, 5, 100, 20);
+                buttonUsun.addActionListener(menuGlowneListener);
+                buttonUsun.setFocusable(false);
+                buttonUsun.setFont(new Font(null, Font.PLAIN, 12));
+                buttonUsun.setBorder(null);
+                buttonUsun.setBackground(null);
+                buttonUsun.setForeground(Color.gray);
+
+                if (osoby.get(i) instanceof Student) {
+                    JButton dodajKurs = new JButton("Dodaj kurs");
+                    dodajKurs.setBounds(500, 160, 100, 20);
+                    dodajKurs.addActionListener(menuGlowneListener);
+                    dodajKurs.setFocusable(false);
+                    dodajKurs.setFont(new Font(null, Font.PLAIN, 12));
+                    dodajKurs.setBorder(null);
+                    dodajKurs.setBackground(null);
+                    dodajKurs.setForeground(Color.gray);
+                    int y=10;
+                    for (int j = 0; j < ((Student) osoby.get(i)).getKursy().size(); j++) {
+                        JLabel kurs = new JLabel((((Student) osoby.get(i)).getKursy().get(j).getNazwa()));
+                        JLabel prowadzacy = new JLabel((((Student) osoby.get(i)).getKursy().get(j).getProwadzacy()));
+                        kurs.setBounds(310,y,200,20);
+                        prowadzacy.setBounds(310,y+15,200,20);
+                        panelStudent.add(kurs);
+                        panelStudent.add(prowadzacy);
+                        y+=35;
+                    }
+                    panelStudent.add(dodajKurs);
+                    kursStudentMap.put(dodajKurs, (Student)osoby.get(i));
+                    buttonStudentMap.put(buttonUsun, (Student) osoby.get(i));
+                } else if (osoby.get(i) instanceof PracownikUczelni) {
+                    buttonPracownikMap.put(buttonUsun, (PracownikUczelni) osoby.get(i));
+                } else if (osoby.get(i) instanceof PracownikUczelniNaukowoDydaktyczny){
+
                 }
+
+                panelStudent.add(labelImie);
+                panelStudent.add(lanelNazwisko);
+                panelStudent.add(labelPesel);
+                panelStudent.add(buttonUsun);
+                panelStudentci.add(panelStudent);
             }
         }
-        panelGlowny.add(panelStudentci);
+        panelStudentci.setPreferredSize(new Dimension(700, panelStudentci.getComponentCount() * 200));
         panelGlowny.add(scrollPaneKoszyk);
-    }
-
-    public JButton getButtonStudent() {
-        return buttonStudent;
-    }
-
-    public JButton getButtonPracownik() {
-        return buttonPracownik;
-    }
-
-    public JButton getButtonPracownikNaukowy() {
-        return buttonPracownikNaukowy;
-    }
-
-    public JPanel getPanelGlowny() {
-        return panelGlowny;
     }
 
     public JButton getButtonDodajStudenta() {
         return buttonDodajStudenta;
     }
 
-    public JButton getButtonDodajStudenta2() {
-        return buttonDodajStudenta2;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
 
     public JTextField getTextImie() {
         return textImie;
@@ -546,16 +429,51 @@ public class MenuGlowne extends JPanel {
         return textStopienStudiow;
     }
 
-    public JTextField getTextStaz() {
-        return textStaz;
-    }
-
     public JTextField getTextNumerSemestru() {
         return textNumerSemestru;
     }
 
+    public JButton getButtonDodajStudenta2() {
+        return buttonDodajStudenta2;
+    }
+
+    public JPanel getPanelStudentci() {
+        return panelStudentci;
+    }
+
+    public JScrollPane getScrollPaneKoszyk() {
+        return scrollPaneKoszyk;
+    }
+
+    public JButton getButtonStudent() {
+        return buttonStudent;
+    }
+
+    public JButton getButtonPracownik() {
+        return buttonPracownik;
+    }
+
+    public JButton getButtonPracownikNaukowy() {
+        return buttonPracownikNaukowy;
+    }
+
+    public JPanel getPanelGlowny() {
+        return panelGlowny;
+    }
+
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+
+    public JTextField getTextStaz() {
+        return textStaz;
+    }
+
+
     public ArrayList<Osoba> getOsoba() {
-        return osoby;
+        return this.osoba;
     }
 
     public JButton getDodajPracownika() {
@@ -590,6 +508,10 @@ public class MenuGlowne extends JPanel {
         return textDorobek;
     }
 
+    public Map<JButton, Student> getKursStudentMap() {
+        return kursStudentMap;
+    }
+
     public JButton getButtonDodajPracownika2() {
         return buttonDodajPracownika2;
     }
@@ -598,10 +520,260 @@ public class MenuGlowne extends JPanel {
         return buttonWyjdz;
     }
 
+    public void rysujPanelPracownik(JPanel panelGlowny) {
+        //PANEL PRACOWNIK
+        JPanel panelPracownik = new JPanel();
+        panelPracownik.setBounds(0, 0, 190, 1620);
+        panelPracownik.setBackground(new Color(176, 33, 33));
+        panelPracownik.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelPracownik.setLayout(null);
+        panelGlowny.add(panelPracownik);
+
+        //LABEL STUDENT
+        JLabel labelStudent = new JLabel("PRACOWNIK");
+        labelStudent.setForeground(new Color(244, 214, 133));
+        labelStudent.setFont(new Font(null, Font.BOLD, 25));
+        labelStudent.setBounds(30, 0, 185, 50);
+        panelPracownik.add(labelStudent);
+
+        //BUTTON DODAJSTUDENTA
+        dodajPracownika = new JButton();
+        dodajPracownika.setText("Dodaj pracownika");
+        dodajPracownika.setForeground(new Color(244, 214, 133));
+        dodajPracownika.setFont(new Font(null, Font.BOLD, 20));
+        dodajPracownika.setBackground(new Color(176, 33, 33));
+        dodajPracownika.addActionListener(menuGlowneListener);
+        dodajPracownika.setFocusable(false);
+        dodajPracownika.setBorder(BorderFactory.createEtchedBorder());
+        dodajPracownika.setBounds(0, 50, 190, 50);
+        panelPracownik.add(dodajPracownika);
+    }
+
+    public void rysujDodajPracownika(JPanel panelGlowny) {
+        JPanel panelDodajPracownika = new JPanel();
+        panelDodajPracownika.setLayout(null);
+        panelDodajPracownika.setBounds(190, 0, 400, 1000);
+        panelGlowny.add(panelDodajPracownika);
+
+        JLabel labelImie;
+        JLabel labelNazwisko;
+        JLabel labelDataUrodzenia;
+        JLabel labelPesel;
+        JLabel labelPlec;
+
+        //TEXT FIELDY/LABELE
+        textImie = new JTextField();
+        textImie.setBounds(60, 50, 250, 40);
+        panelDodajPracownika.add(textImie);
+        labelImie = new JLabel("IMIE");
+        labelImie.setBounds(60, 40, 250, 10);
+        panelDodajPracownika.add(labelImie);
+
+        textNazwisko = new JTextField();
+        textNazwisko.setBounds(60, 125, 250, 40);
+        panelDodajPracownika.add(textNazwisko);
+        labelNazwisko = new JLabel("NAZWISKO");
+        labelNazwisko.setBounds(60, 110, 250, 10);
+        panelDodajPracownika.add(labelNazwisko);
+
+        textDataUrodzenia = new JTextField();
+        textDataUrodzenia.setBounds(60, 200, 250, 40);
+        panelDodajPracownika.add(textDataUrodzenia);
+        labelDataUrodzenia = new JLabel("DATA URODZENIA (dd-mm-rrrr)");
+        labelDataUrodzenia.setBounds(60, 185, 250, 10);
+        panelDodajPracownika.add(labelDataUrodzenia);
+
+        textPesel = new JTextField();
+        textPesel.setBounds(60, 275, 250, 40);
+        panelDodajPracownika.add(textPesel);
+        labelPesel = new JLabel("PESEL");
+        labelPesel.setBounds(60, 260, 250, 10);
+        panelDodajPracownika.add(labelPesel);
+
+        textPlec = new JTextField();
+        textPlec.setBounds(60, 350, 250, 40);
+        panelDodajPracownika.add(textPlec);
+        labelPlec = new JLabel("PLEC");
+        labelPlec.setBounds(60, 335, 250, 10);
+        panelDodajPracownika.add(labelPlec);
+
+        textZarobki = new JTextField();
+        textZarobki.setBounds(60, 425, 250, 40);
+        panelDodajPracownika.add(textZarobki);
+        JLabel labelZarobki = new JLabel("ZAROBKI");
+        labelZarobki.setBounds(60, 410, 250, 10);
+        panelDodajPracownika.add(labelZarobki);
+
+        textStanowisko = new JTextField();
+        textStanowisko.setBounds(200, 500, 110, 40);
+        panelDodajPracownika.add(textStanowisko);
+        JLabel labelStanowisko = new JLabel("STANOWISKO");
+        labelStanowisko.setBounds(200, 485, 200, 10);
+        panelDodajPracownika.add(labelStanowisko);
+
+        textPublikacje = new JTextField();
+        textPublikacje.setBounds(60, 500, 110, 40);
+        panelDodajPracownika.add(textPublikacje);
+        JLabel labelPublikacje = new JLabel("IL PUBLIKACJE");
+        labelPublikacje.setBounds(60, 485, 110, 10);
+        panelDodajPracownika.add(labelPublikacje);
+
+        textDorobek = new JTextField();
+        textDorobek.setBounds(60, 575, 110, 40);
+        panelDodajPracownika.add(textDorobek);
+        JLabel labelDorobek = new JLabel("DOROBEK");
+        labelDorobek.setBounds(60, 560, 110, 10);
+        panelDodajPracownika.add(labelDorobek);
+
+        textStaz = new JTextField();
+        textStaz.setBounds(200, 575, 110, 40);
+        panelDodajPracownika.add(textStaz);
+        JLabel labelStaz = new JLabel("STAZ");
+        labelStaz.setBounds(200, 560, 110, 10);
+        panelDodajPracownika.add(labelStaz);
+
+
+        //BUTTON DODAJ
+        buttonDodajPracownika2 = new JButton();
+        buttonDodajPracownika2.setText("Dodaj");
+        buttonDodajPracownika2.setBounds(220, 625, 90, 40);
+        buttonDodajPracownika2.setFocusable(false);
+        buttonDodajPracownika2.addActionListener(menuGlowneListener);
+        panelDodajPracownika.add(buttonDodajPracownika2);
+    }
+
+    public Map<JButton, Pracownik> getButtonPracownikMap() {
+        return buttonPracownikMap;
+    }
+
+    public Map<JButton, Student> getButtonStudentMap() {
+        return buttonStudentMap;
+    }
+
+    public void rysujPanelWyszukiwanie(JPanel panelGlowny) {
+        //PANEL STUDENT
+        JPanel panelWyszukaj = new JPanel();
+        panelWyszukaj.setBounds(0, 0, 590, 1620);
+        panelWyszukaj.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        panelWyszukaj.setLayout(null);
+        panelGlowny.add(panelWyszukaj);
+
+        //LABEL STUDENT
+        JLabel labelStudent = new JLabel("WYSZUKIWANIE");
+        labelStudent.setFont(new Font(null, Font.BOLD, 25));
+        labelStudent.setBounds(200, 30, 250, 50);
+        panelWyszukaj.add(labelStudent);
+
+        //TEXT
+        textWyszukaj = new JTextField();
+        textWyszukaj.setBounds(20, 80, 250, 40);
+        panelWyszukaj.add(textWyszukaj);
+
+        //BUTTONS
+        wyszukajStudentaPoNazwisku = new JButton("Studenta po nazwisku");
+        wyszukajStudentaPoNazwisku.setBounds(20, 150, 300, 50);
+        wyszukajStudentaPoNazwisku.addActionListener(menuGlowneListener);
+        wyszukajStudentaPoNazwisku.setBackground(Color.WHITE);
+        wyszukajStudentaPoNazwisku.setFocusable(false);
+        panelWyszukaj.add(wyszukajStudentaPoNazwisku);
+
+        wyszukajPracownikaPoNazwisku = new JButton("Pracownika po nazwisku");
+        wyszukajPracownikaPoNazwisku.setBounds(20, 200, 300, 50);
+        wyszukajPracownikaPoNazwisku.addActionListener(menuGlowneListener);
+        wyszukajPracownikaPoNazwisku.setBackground(Color.WHITE);
+        wyszukajPracownikaPoNazwisku.setFocusable(false);
+        panelWyszukaj.add(wyszukajPracownikaPoNazwisku);
+
+        wyszukajPracownikaNaukowegoPoNazwisku = new JButton("Pracownika naukowego po nazwisku");
+        wyszukajPracownikaNaukowegoPoNazwisku.setBounds(20, 250, 300, 50);
+        wyszukajPracownikaNaukowegoPoNazwisku.addActionListener(menuGlowneListener);
+        wyszukajPracownikaNaukowegoPoNazwisku.setBackground(Color.WHITE);
+        wyszukajPracownikaNaukowegoPoNazwisku.setFocusable(false);
+        panelWyszukaj.add(wyszukajPracownikaNaukowegoPoNazwisku);
+
+        wyszukajPowyzejWartosciDorobkuT = new JButton("Powyzej dorobku T");
+        wyszukajPowyzejWartosciDorobkuT.setBounds(20, 300, 300, 50);
+        wyszukajPowyzejWartosciDorobkuT.addActionListener(menuGlowneListener);
+        wyszukajPowyzejWartosciDorobkuT.setBackground(Color.WHITE);
+        wyszukajPowyzejWartosciDorobkuT.setFocusable(false);
+        panelWyszukaj.add(wyszukajPowyzejWartosciDorobkuT);
+
+        wyszukajPoStanowisku = new JButton("Po stanowisku pracownika naukowego");
+        wyszukajPoStanowisku.setBounds(20, 350, 300, 50);
+        wyszukajPoStanowisku.addActionListener(menuGlowneListener);
+        wyszukajPoStanowisku.setBackground(Color.WHITE);
+        wyszukajPoStanowisku.setFocusable(false);
+        panelWyszukaj.add(wyszukajPoStanowisku);
+
+        WyszukajPoStanowiskuPracownikaUczelni = new JButton("Po stanowisku pracownika uczelni");
+        WyszukajPoStanowiskuPracownikaUczelni.setBounds(20, 400, 300, 50);
+        WyszukajPoStanowiskuPracownikaUczelni.addActionListener(menuGlowneListener);
+        WyszukajPoStanowiskuPracownikaUczelni.setBackground(Color.WHITE);
+        WyszukajPoStanowiskuPracownikaUczelni.setFocusable(false);
+        panelWyszukaj.add(WyszukajPoStanowiskuPracownikaUczelni);
+
+        wyszukajPoNazwisku = new JButton("Po nazwisku");
+        wyszukajPoNazwisku.setBounds(20, 450, 300, 50);
+        wyszukajPoNazwisku.addActionListener(menuGlowneListener);
+        wyszukajPoNazwisku.setBackground(Color.WHITE);
+        wyszukajPoNazwisku.setFocusable(false);
+        panelWyszukaj.add(wyszukajPoNazwisku);
+
+        wyszukajPoIndeksie = new JButton("Po indeksie");
+        wyszukajPoIndeksie.setBounds(20, 500, 300, 50);
+        wyszukajPoIndeksie.addActionListener(menuGlowneListener);
+        wyszukajPoIndeksie.setBackground(Color.WHITE);
+        wyszukajPoIndeksie.setFocusable(false);
+        panelWyszukaj.add(wyszukajPoIndeksie);
+    }
+
+    public JButton getWyszukajStudentaPoNazwisku() {
+        return wyszukajStudentaPoNazwisku;
+    }
+
+    public JButton getWyszukajPracownikaPoNazwisku() {
+        return wyszukajPracownikaPoNazwisku;
+    }
+
+    public JButton getWyszukajPracownikaNaukowegoPoNazwisku() {
+        return wyszukajPracownikaNaukowegoPoNazwisku;
+    }
+
+    public JButton getWyszukajPowyzejWartosciDorobkuT() {
+        return wyszukajPowyzejWartosciDorobkuT;
+    }
+
+    public JButton getWyszukajPoStanowisku() {
+        return wyszukajPoStanowisku;
+    }
+
+    public JTextField getTextWyszukaj() {
+        return textWyszukaj;
+    }
+
+    public JButton getWyszukajPoNazwisku() {
+        return wyszukajPoNazwisku;
+    }
+
+    public JButton getWyszukajPoStanowiskuPracownikaUczelni() {
+        return WyszukajPoStanowiskuPracownikaUczelni;
+    }
+
+    public JButton getWyszukajPoIndeksie() {
+        return wyszukajPoIndeksie;
+    }
+
+    public JTextField getTextNazwaKursu() {
+        return textNazwaKursu;
+    }
+
+    public JTextField getTextWykladowca() {
+        return textWykladowca;
+    }
+
     public static void main(String[] args) {
         ArrayList<Osoba> osoby = new ArrayList<>();
         File plik = new File("ListaOsob.ser");
-        osoby.add(new Student("11111111111", "Dawid", "Pilarski", LocalDate.of(2000,12,12), "mezczyzna", "123123", (byte) 1, (byte) 2));
         Serializacja.odczytSer(osoby, plik);
 
         JFrame ramka = new JFrame();
@@ -611,8 +783,15 @@ public class MenuGlowne extends JPanel {
         ramka.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         MenuGlowne menu = new MenuGlowne();
         menu.openMenuGlowne(ramka, osoby);
-        Serializacja.zapisSer(osoby, plik);
+        ramka.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.out.println("Dziala");
+                ramka.setVisible(false);
+                Serializacja.zapisSer(osoby, plik);
 
+            }
+        });
     }
 
     public ImageIcon scaleIcon(ImageIcon icon, int x, int y) {
@@ -621,4 +800,5 @@ public class MenuGlowne extends JPanel {
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
         return scaledIcon;
     }
+
 }
