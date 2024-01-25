@@ -1,5 +1,6 @@
 package Main;
 
+import StrategiaStudent.StypendiumAktywnosc;
 import StrategiaStudent.StypendiumStrategia;
 
 import java.time.LocalDate;
@@ -19,6 +20,11 @@ public class Student extends Osoba{
         this.indeks = indeks;
         this.stopienStudiow = stopienStudiow;
         this.nrSemestru = nrSemestru;
+        this.stypendiumStrategia = new StypendiumAktywnosc();
+    }
+
+    public StypendiumStrategia getStypendiumStrategia() {
+        return stypendiumStrategia;
     }
 
     public double getStypendium() {
@@ -86,6 +92,19 @@ public class Student extends Osoba{
             for (int i = 0; i < kursy.size(); i++) {
                 kursy.get(i).toString();
             }
+    }
+
+    public double policzSrednia(ArrayList<Kursy> kursy){
+        double srednia=0;
+        int ilosc=0;
+        for (int i = 0; i < kursy.size(); i++) {
+            for (double element: kursy.get(i).getOceny()) {
+                srednia += element;
+                ilosc++;
+            }
+        }
+        srednia = srednia/ilosc;
+        return srednia;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package Main;
 import StrategiaPracownik.PensjaStrategia;
+import StrategiaPracownik.pensjaStaz;
 import StrategiaStudent.StypendiumStrategia;
 
 import java.time.LocalDate;
@@ -17,6 +18,11 @@ public abstract class Pracownik extends Osoba {
         this.zarobki = zarobki;
         this.staz = staz;
         this.stanowisko = stanowisko;
+        this.pensjaStrategia = new pensjaStaz();
+    }
+
+    public PensjaStrategia getPensjaStrategia() {
+        return pensjaStrategia;
     }
 
     public double getZarobki() {
@@ -48,7 +54,7 @@ public abstract class Pracownik extends Osoba {
         return super.toString()+ "\nStanowisko: " +stanowisko+ "\nStaz: "+staz+"\nZarobki: "+zarobki;
     }
 
-    public void ustawMetodeStypendium(PensjaStrategia pensjaStrategia){
+    public void ustawMetodePensji(PensjaStrategia pensjaStrategia){
         this.pensjaStrategia = pensjaStrategia;
     }
 

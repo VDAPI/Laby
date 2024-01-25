@@ -352,6 +352,7 @@ public class MenuGlowne extends JPanel {
         panelDodajStudenta.add(buttonSredniaOcen);
 
         //STAZ
+
         buttonStaz.setText("Staz");
         buttonStaz.setBackground(null);
         buttonStaz.setFocusable(false);
@@ -428,7 +429,7 @@ public class MenuGlowne extends JPanel {
 
                 if (osoby.get(i) instanceof Student) {
                     JLabel labelIndeks = new JLabel("INDEKS: " + osoby.get(i).getIndeks());
-                    JLabel labelStStu = new JLabel("ST. STUDIOW: " + ((Student) osoby.get(i)).getStopienStudiow());
+                    JLabel labelStStu = new JLabel("STYPENDIUM: " + ((Student) osoby.get(i)).getStypendiumStrategia().policzStypendium((Student) (osoby.get(i))));
                     JLabel labelNrSem = new JLabel("NR SEMESTRU: " + ((Student) osoby.get(i)).getNrSemestru());
                     labelIndeks.setBounds(10, 110, 300, 18);
                     labelIndeks.setFont(new Font(null, Font.BOLD, 16));
@@ -462,7 +463,7 @@ public class MenuGlowne extends JPanel {
                     kursStudentMap.put(dodajKurs, (Student) osoby.get(i));
                     buttonStudentMap.put(buttonUsun, (Student) osoby.get(i));
                 }else  if(osoby.get(i) instanceof Pracownik){
-                    JLabel zarobki = new JLabel("ZAROBKI: " + ((Pracownik) osoby.get(i)).getZarobki());
+                    JLabel zarobki = new JLabel("ZAROBKI: " + ((Pracownik) osoby.get(i)).getPensjaStrategia().policzPensje((Pracownik) (osoby.get(i))));
                     JLabel staz = new JLabel("STAZ: " + ((Pracownik) osoby.get(i)).getStaz());
                     JLabel stanowisko = new JLabel("STANOWISKO: " + osoby.get(i).getStanowisko());
                     zarobki.setBounds(10, 110, 300, 18);
@@ -1018,6 +1019,14 @@ public class MenuGlowne extends JPanel {
         File plik = new File("ListaOsob.ser");
         Serializacja.odczytSer(osoby, plik);
 
+        for (int i = 0; i < osoby.size(); i++) {
+            if (osoby.get(i) instanceof Student) {
+                for (int j = 0; j < ((Student) osoby.get(i)).getKursy().size(); j++) {
+                    ((Student) osoby.get(i)).getKursy().get(j).dodajOcene(5);
+                }
+                }
+        }
+
         JFrame ramka = new JFrame();
         ramka.setSize(1920, 1080);
         ramka.setLayout(new BoxLayout(ramka.getContentPane(), BoxLayout.Y_AXIS));
@@ -1031,7 +1040,6 @@ public class MenuGlowne extends JPanel {
                 System.out.println("Dziala");
                 ramka.setVisible(false);
                 Serializacja.zapisSer(osoby, plik);
-
             }
         });
     }
