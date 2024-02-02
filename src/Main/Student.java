@@ -77,6 +77,15 @@ public class Student extends Osoba{
         }
     }
 
+    public Kursy getKurs(String nazwaKursu, ArrayList<Kursy> kursy){
+        for (int i = 0; i < kursy.size(); i++) {
+            if((kursy.get(i)).equals(nazwaKursu)){
+                return kursy.get(i);
+            }
+        }
+        return null;
+    }
+
     public void getStanKursu(String nazwaKursu){
         for (int i = 0; i < kursy.size(); i++) {
             if((kursy.get(i)).equals(nazwaKursu)){
